@@ -18,14 +18,22 @@ public class QuestionService {
         return this.questionRepository.findAll();
     }
 
+    Question article=new Question();
+
     public void create(String subject, String content) {
 
-        Question article=new Question();
         article.setSubject(subject);
         article.setContent(content);
         article.setCreateDate(LocalDateTime.now());
         this.questionRepository.save(article);
 
 
+    }
+    public int getCreateQuestionId() {
+        return article.getId();
+    }
+
+    public Question getQuestion(Integer id) {
+        return this.questionRepository.getById(id);
     }
 }

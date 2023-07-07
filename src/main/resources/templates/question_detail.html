@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Title</title>
+</head>
+<body>
+
+<a th:href="@{|/article/list|}" style="border:1px solid black">목록가기 </a>
+<div>
+<h1>제목</h1>
+<p th:text="${question.subject}">제목란</p>
+</div>
+<div >
+ <p>작성일</p> <p th:text="${question.createDate}"></p>
+   <p>내용</p><p th:text="${question.content}"></p>
+</div>
+</body>
+</html>
