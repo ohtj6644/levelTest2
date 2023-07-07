@@ -9,7 +9,7 @@
 <form th:object="${questionForm}" th:action="@{|/article/create|}" method="post">
   <div>
     <p>제목</p>
-    <input type="text" th:filed="subject">
+    <input name="subject" id="subject" type="text" th:filed="subject">
   </div>
 
   <div>
