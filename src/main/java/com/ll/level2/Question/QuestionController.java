@@ -15,6 +15,8 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
+import org.springframework.ui.ModelMap;
+import org.springframework.web.servlet.ModelAndView;
 
 import java.security.Principal;
 
@@ -72,14 +74,16 @@ public class QuestionController {
 
     @PreAuthorize("isAuthenticated()")
     @GetMapping("/article/modify/{id}")
-    public String articleModify(QuestionForm articleForm, @PathVariable("id") Integer id, Principal principal) {
+    public ModelAndView articleModify(QuestionForm articleForm, @PathVariable("id") Integer id, Principal principal) {
         Question article = this.questionService.getQuestion(id);
         if (!article.getAuthor().getUsername().equals(principal.getName())) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "수정권한이 없습니다.");
+            ModelMap model = new ModelMap();
+            model.addAttribute("errorMessage", "수정권한이 없습니다.");
+            return new ModelAndView("error_page", model);
         }
         articleForm.setSubject(article.getSubject());
         articleForm.setContent(article.getContent());
-        return "question_form";
+        return new ModelAndView("question_form", "questionForm", articleForm);
     }
 
     @PreAuthorize("isAuthenticated()")
@@ -99,13 +103,15 @@ public class QuestionController {
 
     @PreAuthorize("isAuthenticated()")
     @GetMapping("/article/delete/{id}")
-    public String articleDelete(Principal principal, @PathVariable("id") Integer id) {
+    public ModelAndView articleDelete(Principal principal, @PathVariable("id") Integer id) {
         Question article = this.questionService.getQuestion(id);
         if (!article.getAuthor().getUsername().equals(principal.getName())) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "삭제권한이 없습니다.");
+            ModelMap model = new ModelMap();
+            model.addAttribute("errorMessage", "삭제권한이 없습니다.");
+            return new ModelAndView("error_page", model);
         }
         this.questionService.delete(article);
-        return "redirect:/article/list";
+        return new ModelAndView("redirect:/article/list");
     }
 
 
